@@ -92,49 +92,54 @@ func MergeSort(list *List) {
 	if list.length == 1 {
 		return
 	}
-	MSort(list, 1, list.length-1)
+	extArr := &List{
+		r:      make([]int, list.length),
+		length: list.length,
+	}
+
+	MSort(list, extArr, 1, list.length-1)
 }
 
-func MSort(list *List, s, n int) {
+func MSort(list, extArr *List, s, n int) {
 	if s == n {
 		return
 	}
 	m := (n + s) / 2
-	MSort(list, s, m)
-	MSort(list, m+1, n)
-	Merge(list, s, m, n)
+	MSort(list, extArr, s, m)
+	MSort(list, extArr, m+1, n)
+	Merge(list, extArr, s, m, n)
 }
 
-func Merge(list *List, s, m, n int) {
-	r2 := make([]int, n-s+1)
+func Merge(list, extArr *List, s, m, n int) {
+	// r2 := make([]int, n-s+1)
 	i := s
 	j := m + 1
-	k := 0
+	k := s
 	for ; i <= m && j <= n; k++ {
 		if list.r[i] > list.r[j] {
-			r2[k] = list.r[j]
+			extArr.r[k] = list.r[j]
 			j++
 		} else {
-			r2[k] = list.r[i]
+			extArr.r[k] = list.r[i]
 			i++
 		}
 	}
 
 	if i <= m {
-		for ; k < len(r2); k++ {
-			r2[k] = list.r[i]
+		for ; k <= n; k++ {
+			extArr.r[k] = list.r[i]
 			i++
 		}
 	}
 
 	if j <= n {
-		for ; k < len(r2); k++ {
-			r2[k] = list.r[j]
+		for ; k <= n; k++ {
+			extArr.r[k] = list.r[j]
 			j++
 		}
 	}
-	fmt.Println("r2: ", r2)
-	copy(list.r[s:n+1], r2[:])
+	fmt.Println("external array: ", extArr.r)
+	copy(list.r[s:n+1], extArr.r[s:n+1])
 }
 
 func QuickSort(list *List) {
@@ -154,6 +159,7 @@ func QSort(list *List, s, m int) {
 func Partition(list *List, low, high int) int {
 	pivot := list.r[low]
 	for low < high {
+		// 使用 >= 的问题：会将连续出现的值归为其中一方，使子树不平衡
 		for low < high && list.r[high] >= pivot {
 			high--
 		}
@@ -164,6 +170,24 @@ func Partition(list *List, low, high int) int {
 		swap(list, low, high)
 	}
 	return low
+}
+
+func PartitionAlter(list *List, low, high int) int {
+	i, j := low, high
+	pivot := list.r[i]
+	for i < j {
+		for i < j && list.r[j] > pivot {
+			j--
+		}
+		for i < j && list.r[i] < pivot {
+			i++
+		}
+		swap(list, i, j)
+		i++
+		j--
+	}
+	swap(list, low, j)
+	return i
 }
 
 func QuickSort3(list *List) {
