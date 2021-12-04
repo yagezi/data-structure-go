@@ -64,7 +64,11 @@ func Test_Merge(t *testing.T) {
 		r:      []int{-1, 3, 4, 1, 2},
 		length: 5,
 	}
-	Merge(list, 1, list.length/2, list.length-1)
+	extArr := &List{
+		r:      make([]int, list.length),
+		length: list.length,
+	}
+	Merge(list, extArr, 1, list.length/2, list.length-1)
 	list.Print()
 }
 
@@ -73,7 +77,11 @@ func Test_MSort(t *testing.T) {
 		r:      []int{-1, 4, 3, 2, 1},
 		length: 5,
 	}
-	MSort(list, 1, 4)
+	extArr := &List{
+		r:      make([]int, list.length),
+		length: list.length,
+	}
+	MSort(list, extArr, 1, 4)
 	list.Print()
 }
 
@@ -88,10 +96,19 @@ func Test_MergeSort(t *testing.T) {
 
 func Test_Partition(t *testing.T) {
 	list := &List{
-		r:      []int{-1, 5, 1, 9, 3, 7, 4, 8, 6, 2},
+		r:      []int{-1, 5, 1, 2, 3, 4, 5, 5, 5, 8},
 		length: 9,
 	}
 	Partition(list, 1, 9)
+	list.Print()
+}
+
+func Test_PartitionAlter(t *testing.T) {
+	list := &List{
+		r:      []int{-1, 5, 5, 2, 3, 4, 5, 2, 5, 8},
+		length: 9,
+	}
+	PartitionAlter(list, 1, 9)
 	list.Print()
 }
 
