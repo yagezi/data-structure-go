@@ -1,69 +1,64 @@
 package stack
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 type Notation string
 
-type Oprator rune
-
-// Compare returns an integer comparing oprator priority.
-// The result will be 0 if self==other, -1 if self < other, and +1 if self > other.
-func (o Oprator) ComparePriority(other Oprator) int {
-	lhs := OPERATORS[o]
-	rhs := OPERATORS[other]
-	return lhs - rhs
+func Priority(a rune) int {
+	var OPERATORS = map[rune]int{
+		'(': 0,
+		'+': 1,
+		'-': 1,
+		'*': 2,
+		'/': 2,
+	}
+	return OPERATORS[a]
 }
 
-var OPERATORS = map[Oprator]int{
-	'+': 1,
-	'-': 1,
-	'*': 2,
-	'/': 2,
-}
-
-func Mid2Post(mid Notation) (post Notation) {
+func Mid2Post(mid Notation, stack IStack) (post Notation) {
 	if len(mid) == 0 {
 		return
 	}
 
-	stack := NewStack(len(mid))
+	// stack := NewStack(len(mid))
 	p := make([]rune, 0, len(mid))
 
 	for _, s := range mid {
-		fmt.Println(string(s))
+		fmt.Println(Notation(s))
 
-		switch Oprator(s) {
+		switch s {
 		default:
 			p = append(p, s)
-		case Oprator(')'):
-			for t := stack.Pop().(Oprator); t != '('; {
-				p = append(p, rune(t))
+		case ')':
+			t, err := stack.Pop()
+			for !errors.Is(err, ErrEmptyStack{}) && t.(rune) != '(' {
+				p = append(p, t.(rune))
+				t, err = stack.Pop()
 			}
-		case Oprator('('):
+		case '(':
 			stack.Push(s)
-		case Oprator('+'):
+		case '+':
 			fallthrough
-		case Oprator('-'):
+		case '-':
 			fallthrough
-		case Oprator('*'):
+		case '*':
 			fallthrough
-		case Oprator('/'):
-			if stack.GetTop() > -1 {
-				for t := stack.Top().(Oprator); t.ComparePriority(Oprator(s)) >= 0; {
-					p = append(p, rune(t))
-					stack.Pop()
-				}
+		case '/':
+			t, err := stack.Top()
+			for !errors.Is(err, ErrEmptyStack{}) && Priority(t.(rune)) >= Priority(s) {
+				t, _ = stack.Pop()
+				p = append(p, t.(rune))
+				t, err = stack.Top()
 			}
-			stack.Push(Oprator(s))
+			stack.Push(s)
 		}
-
-		// fmt.Println(string(p))
-		fmt.Println(stack.data)
-
 	}
 
-	for stack.GetTop() != -1 {
-		p = append(p, stack.Pop().(rune))
+	for t, err := stack.Pop(); !errors.Is(err, ErrEmptyStack{}); t, err = stack.Pop() {
+		p = append(p, t.(rune))
 	}
-	return Notation(string(p))
+	return Notation(p)
 }
