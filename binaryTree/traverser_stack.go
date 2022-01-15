@@ -29,7 +29,7 @@ func LevelOrderQueue(tree *BiTree) {
 
 func PreOrderStack(tree *BiTree) {
 	str := ""
-	s := stack.NewStack(100)
+	s := stack.NewStack()
 	cur := tree.head
 
 	for !s.IsEmpty() || cur != nil {
@@ -38,7 +38,7 @@ func PreOrderStack(tree *BiTree) {
 			str += fmt.Sprintf("%s ", string(cur.key.(byte)))
 			cur = cur.left
 		} else {
-			n, _ := s.Pop()
+			n := s.Pop()
 			cur = n.(*BiTNode).right
 		}
 	}
@@ -47,7 +47,7 @@ func PreOrderStack(tree *BiTree) {
 
 func InOrderStack(tree *BiTree) {
 	str := ""
-	s := stack.NewStack(100)
+	s := stack.NewStack()
 	cur := tree.head
 
 	for !s.IsEmpty() || cur != nil {
@@ -55,7 +55,7 @@ func InOrderStack(tree *BiTree) {
 			s.Push(cur)
 			cur = cur.left
 		} else {
-			n, _ := s.Pop()
+			n := s.Pop()
 			cur = n.(*BiTNode)
 			str += fmt.Sprintf("%s ", string(cur.key.(byte)))
 			cur = cur.right
@@ -66,8 +66,8 @@ func InOrderStack(tree *BiTree) {
 
 func PostOrderStack(tree *BiTree) {
 	str := ""
-	s := stack.NewStack(100)
-	flags := stack.NewStack(100)
+	s := stack.NewStack()
+	flags := stack.NewStack()
 	cur := tree.head
 
 	for !s.IsEmpty() || cur != nil {
@@ -76,7 +76,7 @@ func PostOrderStack(tree *BiTree) {
 			flags.Push(cur)
 			cur = cur.left
 		} else {
-			n, _ := s.Pop()
+			n := s.Pop()
 			cur = n.(*BiTNode)
 			str += fmt.Sprintf("%s ", string(cur.key.(byte)))
 			cur = cur.right
