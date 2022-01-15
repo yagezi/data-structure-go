@@ -3,65 +3,49 @@ package stack
 type Element interface{}
 
 type IStack interface {
-	Pop() (Element, error)
-	Top() (Element, error)
-	Push(e Element) error
+	Pop() Element
+	Top() Element
+	Push(e Element)
 	IsEmpty() bool
 }
 
 type Stack struct {
-	data   []Element
-	top    int
-	length int
+	data []Element
+	size int
 }
 
-func NewStack(length_ int) *Stack {
+func NewStack(cap ...int) *Stack {
+	c := 1
+	if len(cap) > 0 {
+		c = cap[0]
+	}
 	return &Stack{
-		data:   make([]Element, length_),
-		top:    -1,
-		length: length_,
+		data: make([]Element, 0, c),
 	}
 }
 
-func (s *Stack) Pop() (Element, error) {
-	if s.top == -1 {
-		return nil, ErrEmptyStack{}
+func (s *Stack) Pop() Element {
+	if s.size == 0 {
+		return nil
 	}
-	res := s.data[s.top]
-	s.top--
-	return res, nil
+	res := s.data[s.size-1]
+	s.data = s.data[:s.size-1]
+	s.size--
+	return res
 }
 
-func (s *Stack) Push(e Element) error {
-	if s.top >= s.length-1 {
-		return ErrFullStack{}
-	}
-	s.top++
-	s.data[s.top] = e
-	return nil
+func (s *Stack) Push(e Element) {
+	s.data = append(s.data, e)
+	s.size++
 }
 
-func (s Stack) Top() (Element, error) {
-	if s.top == -1 {
-		return nil, ErrEmptyStack{}
+func (s Stack) Top() Element {
+	if s.size == 0 {
+		return nil
 	}
-	return s.data[s.top], nil
+	return s.data[s.size-1]
 }
 
 func (s Stack) IsEmpty() bool {
-	return s.top == -1
-}
-
-type ErrEmptyStack struct {
-}
-
-func (e ErrEmptyStack) Error() string {
-	return "empty stack"
-}
-
-type ErrFullStack struct {
-}
-
-func (e ErrFullStack) Error() string {
-	return "sfull stack"
+	return s.size == 0
 }
