@@ -1,7 +1,6 @@
 package stack
 
 import (
-	"errors"
 	"fmt"
 )
 
@@ -23,7 +22,6 @@ func Mid2Post(mid Notation, stack IStack) (post Notation) {
 		return
 	}
 
-	// stack := NewStack(len(mid))
 	p := make([]rune, 0, len(mid))
 
 	for _, s := range mid {
@@ -33,10 +31,10 @@ func Mid2Post(mid Notation, stack IStack) (post Notation) {
 		default:
 			p = append(p, s)
 		case ')':
-			t, err := stack.Pop()
-			for !errors.Is(err, ErrEmptyStack{}) && t.(rune) != '(' {
+			t := stack.Pop()
+			for !stack.IsEmpty() && t.(rune) != '(' {
 				p = append(p, t.(rune))
-				t, err = stack.Pop()
+				t = stack.Pop()
 			}
 		case '(':
 			stack.Push(s)
@@ -47,17 +45,17 @@ func Mid2Post(mid Notation, stack IStack) (post Notation) {
 		case '*':
 			fallthrough
 		case '/':
-			t, err := stack.Top()
-			for !errors.Is(err, ErrEmptyStack{}) && Priority(t.(rune)) >= Priority(s) {
-				t, _ = stack.Pop()
+			t := stack.Top()
+			for !stack.IsEmpty() && Priority(t.(rune)) >= Priority(s) {
+				t = stack.Pop()
 				p = append(p, t.(rune))
-				t, err = stack.Top()
+				t = stack.Top()
 			}
 			stack.Push(s)
 		}
 	}
 
-	for t, err := stack.Pop(); !errors.Is(err, ErrEmptyStack{}); t, err = stack.Pop() {
+	for t := stack.Pop(); !stack.IsEmpty(); t = stack.Pop() {
 		p = append(p, t.(rune))
 	}
 	return Notation(p)
