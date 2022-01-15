@@ -1,6 +1,7 @@
 package queue
 
 import (
+	"fmt"
 	"testing"
 
 	. "github.com/smartystreets/goconvey/convey"
@@ -74,4 +75,17 @@ func TestQueue(t *testing.T) {
 		})
 	})
 
+}
+
+func Test_PriorityQueue(t *testing.T) {
+	pq := NewPQueue("min")
+	for _, v := range []int{5, 3, 4, 1, 2} {
+		pq.PushBack(v)
+	}
+	fmt.Println(pq)
+	fmt.Println("head is ", pq.Head())
+
+	for !pq.IsEmpty() {
+		fmt.Println(pq.PopHead())
+	}
 }
