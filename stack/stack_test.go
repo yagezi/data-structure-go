@@ -6,19 +6,10 @@ import (
 )
 
 func Test_stack(t *testing.T) {
-	s := NewStack(1)
+	s := NewStack()
 	s.Push("0")
-	_, err := s.Pop()
-	fmt.Println(err)
-	_, err = s.Pop()
-	fmt.Println(err)
-}
-
-type Opt byte
-
-func Test_Generic(t *testing.T) {
-	s := NewStack(1)
-	s.Push(Opt('1'))
-	e, _ := s.Pop()
-	fmt.Println(e.(Opt))
+	fmt.Println(s.Pop())
+	fmt.Println(s.Pop())
+	s.Push("1")
+	fmt.Println(s.Pop())
 }
