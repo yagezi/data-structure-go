@@ -1,4 +1,10 @@
-package sort_user
+/*
+*@Time        : 2021/12/03
+*@File        : sort_test.go
+*@Description : sorting unittest
+ */
+
+package sort
 
 import (
 	"fmt"
@@ -148,11 +154,44 @@ func Test_QSort3(t *testing.T) {
 	list.Print()
 }
 
-func Test_Partition3Test(t *testing.T) {
+func Test2_Partition3(t *testing.T) {
 	list := &List{
 		r:      []int{-1, 3, 4, 2},
 		length: 4,
 	}
 	fmt.Println(Partition3(list, 1, 3))
 	list.Print()
+}
+
+func Test_CountSort(t *testing.T) {
+	list := &List{
+		r:      []int{9, 3, 5, 4, 9, 1, 2, 7, 8, 1, 3, 6, 5, 3, 4, 0, 10, 9, 7, 9},
+		length: 20,
+	}
+	CountSort(list)
+	list.Print()
+}
+
+func Test_RadixSort(t *testing.T) {
+	list := &List{
+		r:      []int{170, 45, 75, 90, 802, 24, 2, 66},
+		length: 8,
+	}
+	RadixSort(list)
+	list.Print()
+}
+
+func Test_BucketSort(t *testing.T) {
+	list := &Listf{
+		r: []float32{9.8, 0.6, 10.1, 1.9, 3.07, 3.04, 5.0, 8.0, 4.8, 7.68},
+	}
+	BucketSort(list, 5)
+	list.Print()
+}
+
+func Test_floatInserttSort(t *testing.T) {
+	list := &Listf{
+		r: []float32{9.8, 0.6, 10.1, 1.9, 3.07, 3.04, 5.0, 8.0, 4.8, 7.68},
+	}
+	fmt.Println(insertSortFoalt(list.r))
 }
