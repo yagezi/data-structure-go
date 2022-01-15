@@ -1,58 +1,38 @@
 package stack
 
-import "errors"
+import (
+	"fmt"
+	"testing"
 
-type Queue struct {
-	in     *Stack
-	out    *Stack
-	length int
+	. "github.com/smartystreets/goconvey/convey"
+)
+
+func TestTwoStackQueue(t *testing.T) {
+	Convey("given an empty queue", t, func() {
+		queue := NewQueue()
+
+		Convey("when pop", func() {
+			e := queue.Pop()
+
+			Convey("then should be empty", func() {
+				So(e, ShouldBeNil)
+			})
+		})
+	})
 }
 
-func NewQueue(length_ int) *Queue {
-	return &Queue{
-		in:     NewStack(length_),
-		out:    NewStack(length_),
-		length: length_,
-	}
-}
-
-func (q *Queue) Push(e Element) error {
-	errIn := q.in.Push(e)
-	_, errOut := q.out.Top()
-	if isFullStack(errIn) && isEmptyStack(errOut) {
-		if err := q.roll(); err != nil {
-			return err
-		}
-		errIn = q.in.Push(e)
-	}
-	return errIn
-}
-
-func (q *Queue) Pop() (Element, error) {
-	res, errOut := q.out.Pop()
-	_, errIn := q.in.Top()
-	if isEmptyStack(errOut) && !isEmptyStack(errIn) {
-		if err := q.roll(); err != nil {
-			return nil, err
-		}
-		res, errOut = q.out.Pop()
-	}
-	return res, errOut
-}
-
-func (q *Queue) roll() error {
-	for t, err := q.in.Pop(); !isEmptyStack(err); t, err = q.in.Pop() {
-		if err := q.out.Push(t); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func isEmptyStack(err error) bool {
-	return errors.Is(err, ErrEmptyStack{})
-}
-
-func isFullStack(err error) bool {
-	return errors.Is(err, ErrFullStack{})
+func TestQueue(t *testing.T) {
+	queue := NewQueue()
+	queue.Push("1")
+	queue.Push("2")
+	queue.Push("3")
+	queue.Push("4")
+	fmt.Println(queue.Pop())
+	fmt.Println(queue.Pop())
+	fmt.Println(queue.Pop())
+	fmt.Println(queue.Pop())
+	queue.Push("1")
+	queue.Push("2")
+	fmt.Println(queue.Pop())
+	fmt.Println(queue.Pop())
 }
