@@ -2,7 +2,7 @@
 *@Time        : 2022/01/05
 *@Creator     :
 *@File        : trie.go
-*@Description : dictionary tree
+*@Description : trie / prefix tree / radix tree
  */
 
 package trie
