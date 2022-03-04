@@ -1,6 +1,7 @@
 package queue
 
 import (
+	"container/list"
 	"fmt"
 	"testing"
 
@@ -88,4 +89,44 @@ func Test_PriorityQueue(t *testing.T) {
 	for !pq.IsEmpty() {
 		fmt.Println(pq.PopHead())
 	}
+}
+
+func Test_MonoQueue(t *testing.T) {
+	// 单调队列模板，递增
+	arr := []int{1, 3, -1, -3, 5, 3, 6, 7}
+	l := list.New()
+
+	for _, v := range arr {
+		for l.Len() > 0 && l.Back().Value.(int) >= v {
+			l.Remove(l.Back())
+		}
+		l.PushBack(v)
+		for e := l.Front(); e != nil; e = e.Next() {
+			fmt.Printf("%v ", e.Value.(int))
+		}
+		fmt.Println()
+	}
+}
+
+func Test_MonoQueueIndex(t *testing.T) {
+	// 单调队列模板, 索引表示，递增
+	arr := []int{1, 3, -1, -3, 5, 3, 6, 7}
+	// 滑动窗长度
+	win := 3
+	l := list.New()
+
+	for i := range arr {
+		for l.Len() > 0 && arr[l.Back().Value.(int)] <= arr[i] {
+			l.Remove(l.Back())
+		}
+		l.PushBack(i)
+		for l.Front().Value.(int) < i-win+1 {
+			l.Remove(l.Front())
+		}
+		for e := l.Front(); e != nil; e = e.Next() {
+			fmt.Printf("%v ", arr[e.Value.(int)])
+		}
+		fmt.Println()
+	}
+
 }
