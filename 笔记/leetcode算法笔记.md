@@ -80,3 +80,50 @@ www.hackerrank.com
         reverse = reverse*10 + y %10
         y /= 10
     }
+
+
+## go std container
+sort & search
+unstable sort: quick sort
+stable sort: merge sort
+sorted search: binary search
+
+heap
+堆、优先队列
+
+list
+链表、栈、队列
+
+## 最短路径
+A*搜索
+
+欧式距离
+曼哈顿距离
+对角线距离（切比雪夫距离）
+
+
+### 选择合适的最短路径算法
+有向或无向的无权图 				BFS，A-star(A*)
+有向无环图，正负权值(DAG)  		topo sort， Bellman Ford	
+一般有向图，正权值 				Dijkstra
+有向图，正负权值				Bellman Ford	
+
+单源单目的地，有权图或无权       A-star(A*)
+单源多目的地，无权              BFS
+单源多目的地，正权值            Dijkstra
+单源多目的地，正负权值          Bellman Ford
+多源多目的地                   Floyd, Johnson
+（所有顶点到所有顶点）
+
+### Dijkstra
+使用path数组记录最短路径。path[i] = 顶点src到顶点i的最短路径上，i的前驱顶点。
+path[src] = src
+
+dijkstra不能处理有向负权值图。对于有向负权值图，应该用Bellman Ford处理
+
+### A-star
+TODO
+
+## 单调栈
+
+求解问题涉及输入数据的凹凸性时（如接雨水问题），需考虑使用单调栈
