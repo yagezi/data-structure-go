@@ -2,7 +2,7 @@
 *@Time        : 2022/01/06
 *@Creator     :
 *@File        : node.go
-*@Description : trie node
+*@Description : trie / prefix tree / radix tree node
  */
 
 package trie
