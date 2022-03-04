@@ -1,6 +1,7 @@
 package binarytree
 
 import (
+	"fmt"
 	"testing"
 
 	. "github.com/smartystreets/goconvey/convey"
@@ -109,4 +110,26 @@ func TestBinarySearchTree(t *testing.T) {
 		})
 
 	})
+}
+
+func Test_SegmentTree(t *testing.T) {
+	arr := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}
+	st := NewSTree(arr)
+	fmt.Println(st)
+
+	st.Update(1, 2)
+	fmt.Println(st)
+
+	// fmt.Println(st.Query(1, 4))
+
+}
+
+func Test_IndexedTree(t *testing.T) {
+	arr := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}
+	ftree := NewFTree(arr)
+	fmt.Println(ftree)
+	fmt.Println(ftree.sum(4))
+	ftree.add(1, 1)
+	fmt.Println(ftree)
+	fmt.Println(ftree.sum(4))
 }
